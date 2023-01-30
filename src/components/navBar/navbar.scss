@@ -1,0 +1,23 @@
+header {
+  background-color: rgb(22, 22, 49);
+}
+.navbar {
+  padding: 25px;
+  display: flex;
+  gap: 25px;
+  justify-content: flex-end;
+
+  & > a {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+
+    &:hover {
+      opacity: 0.5;
+      //   text-decoration: underline;
+      border-bottom: 2px solid goldenrod;
+    }
+  }
+}
