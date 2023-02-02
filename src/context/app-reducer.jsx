@@ -1,13 +1,19 @@
-import { MESSAGE } from "./app-actions";
+import { SELECTED_CAR, MESSAGE, LOADING } from "./app-actions";
 
 const appReducer = (state, action) => {
   switch (action.type) {
-    case MESSAGE:
+    case SELECTED_CAR:
       return {
-        message: action.payload,
+        ...state,
+        selectedCar: action.payload,
+      };
+    case LOADING:
+      return {
+        ...state,
+        isLoading: action.payload,
       };
     default:
-      return {};
+      return state;
   }
 };
 

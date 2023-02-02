@@ -1,26 +1,43 @@
-import { useEffect, useState } from "react";
-// import CarCard from "../../components/carCard/carCard";
+import { useEffect, useState, useContext } from "react";
 import Axios from "../../axios";
 import CarRow from "../../components/carRow/carRow";
 import CarsTable from "../../components/carsTable/carsTable";
+import {
+  getCarsData,
+  getRandomHexColor,
+} from "../../components/functions/functions";
 import Loader from "../../components/loader/loader";
+import EditCarModal from "../../components/modal/editCarModal";
 import Modal from "../../components/modal/modal";
 import Pagination from "../../components/pagination/pagination";
+import AppContext from "../../context/app-context";
 
 function Garage() {
+  const { setLoaderState } = useContext(AppContext);
   const [carsData, setCarsData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+  const [pagesCount, setPagesCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    Axios.get("garage")
+    let endpoint = "garage";
+    let query = `?_page=${currentPage}`;
+    setLoaderState(true);
+
+    Axios.get(endpoint + query)
       .then((res) => {
-        console.log(res.data);
+        setTotalCount(res.headers["x-total-count"]);
         setCarsData(res.data);
+        setPagesCount(Math.ceil(totalCount / 7));
       })
-      .then((err) => {
+      .catch((err) => {
         console.log(err);
+      })
+      .finally(function () {
+        setLoaderState(false);
       });
-  }, []);
+  }, [isModalOpen]);
 
   function createNewCar() {
     let newCar = {
@@ -33,29 +50,16 @@ function Garage() {
       .catch((err) => console.log(err));
   }
 
-  function getRandomHexColor() {
-    let hex = "#";
-    const possible = "ABCDEF0123456789";
-
-    for (let i = 0; i < 6; i++) {
-      hex += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-
-    return hex;
-  }
-
   return (
     <section className="pb-10">
       {/* <!-- Edge X Ring Spinner s2 --> */}
 
       {isModalOpen ? (
         <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
-          <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ad,
-            tenetur?
-          </p>
+          <EditCarModal setIsModalOpen={setIsModalOpen} />
         </Modal>
-      ) : null}
+      ) : // <Test />
+      null}
       <div className="container">
         <div>
           <h1 className="mb-8 mt-3 text-center text-4xl text-slate-900">
@@ -69,7 +73,7 @@ function Garage() {
               Generate new cars
             </button>
             <button
-              onClick={() => createNewCar()}
+              onClick={() => setIsModalOpen(true)}
               className="mx-3 py-2 px-4 bg-cyan-600 text-lg rounded text-white hover:bg-cyan-500">
               Create new car
             </button>

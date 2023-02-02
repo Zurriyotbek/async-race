@@ -3,7 +3,7 @@ import React from "react";
 function Test() {
   return (
     // <!-- ====== Modal Section Start -->
-    <section x-data="{modalOpen: false}">
+    <div x-data="{modalOpen: false}">
       <div className="container mx-auto py-20">
         <button
           //   @click="modalOpen = true"
@@ -14,7 +14,7 @@ function Test() {
       <div
         x-show="modalOpen"
         x-transition
-        className="fixed top-0 left-0 flex h-full min-h-screen w-full items-center justify-center bg-black bg-opacity-90 px-4 py-5">
+        className="fixed top-0 left-0 flex h-full min-h-screen w-full items-center justify-center bg-black bg-opacity-90 px-4 py-5 z-50">
         <div
           //   @click.outside="modalOpen = false"
           className="w-full max-w-[570px] rounded-[20px] bg-white py-12 px-8 text-center md:py-[60px] md:px-[70px]">
@@ -43,7 +43,7 @@ function Test() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
     // <!-- ====== Modal Section End -->
   );
 }
